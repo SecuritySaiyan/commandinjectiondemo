@@ -1,2 +1,2 @@
 # sast demo
-Demo of super secure and amazong code to benchmark sast tools. 
+Demo of "super secure" and amazing code to benchmark sast tools. 
