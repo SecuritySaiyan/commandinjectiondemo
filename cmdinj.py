@@ -10,3 +10,4 @@ def hello():
     query = SQLAlchemy().session.query(User).from_statement(stmt) # Noncompliant
     user = query.one()
     return "Hello %s" % user.username
+#luuulllllzzz
