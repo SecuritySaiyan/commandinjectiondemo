@@ -28,7 +28,7 @@ jobs:
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
           publishDeployment: ${{ secrets.SEMGREP_DEPLOYMENT_ID }}
           generateSarif: "1"
-          config:
+            config:
             p/security-audit
             p/secrets
             p/security-policy
