@@ -1,37 +1,12 @@
-package servlets;
+from flask import request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+from database.users import User
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.io.FilenameUtils;
-
-public class Cls extends HttpServlet
-{
-    private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
-
-    protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String input1 = req.getParameter("input1");
-        // ruleid:servletresponse-writer-xss
-        resp.getWriter().write(input1);
-    }
-
-    protected void danger2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String input1 = req.getParameter("input1");
-        // ruleid:servletresponse-writer-xss
-        PrintWriter writer = resp.getWriter();
-        writer.write(input1);
-    }
-
-    protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String input1 = req.getParameter("input1");
-        // ok:servletresponse-writer-xss
-        resp.getWriter().write(Encode.forHtml(input1));
-    }
-}
+@app.route('hello')
+def hello():
+    id = request.args.get("id")
+    stmt = text("SELECT * FROM users where id=%s" % id) # Query is constructed based on user inputs
+    query = SQLAlchemy().session.query(User).from_statement(stmt) # Noncompliant
+    user = query.one()
+    return "Hello %s" % user.username
