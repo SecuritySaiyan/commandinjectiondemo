@@ -4,7 +4,6 @@ print ("No input")
 else:
 print ("Result =", eval(comp))
 
+#lulz
 
-address = request.args.get("address")
-cmd = "ping -c 1 %s" % address
-subprocess.Popen(cmd, shell=True)
+api.token(eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9)
