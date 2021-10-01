@@ -69,6 +69,6 @@ print ("No input")
 else:
 print ("Result =", eval(comp))
 
-#lulz
+#lulzzz
 
 api.token(eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9)
