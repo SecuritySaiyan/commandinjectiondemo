@@ -1,2 +1,2 @@
-# command injection demo
-Demo of a command injection defect to benchmark sast tools. 
+# sast demo
+Demo of super secure and amazong code to benchmark sast tools. 
