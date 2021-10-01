@@ -1,101 +1,37 @@
-package main
+package servlets;
 
-import (
-    "crypto/des"
-    "crypto/md5"
-    "crypto/rc4"
-    "crypto/sha1"
-    "fmt"
-    "io"
-    "log"
-    "os"
-)
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-func main() {
-}
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-func test_des() {
-    // NewTripleDESCipher can also be used when EDE2 is required by
-    // duplicating the first 8 bytes of the 16-byte key.
-    ede2Key := []byte("example key 1234")
+import org.apache.commons.io.FilenameUtils;
 
-    var tripleDESKey []byte
-    tripleDESKey = append(tripleDESKey, ede2Key[:16]...)
-    tripleDESKey = append(tripleDESKey, ede2Key[:8]...)
-    // ruleid: use-of-DES
-    _, err := des.NewTripleDESCipher(tripleDESKey)
-    if err != nil {
-        panic(err)
+public class Cls extends HttpServlet
+{
+    private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
+
+    protected void danger(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String input1 = req.getParameter("input1");
+        // ruleid:servletresponse-writer-xss
+        resp.getWriter().write(input1);
     }
 
-    // See crypto/cipher for how to use a cipher.Block for encryption and
-    // decryption.
-}
-
-func test_md5() {
-    f, err := os.Open("file.txt")
-    if err != nil {
-        log.Fatal(err)
+    protected void danger2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String input1 = req.getParameter("input1");
+        // ruleid:servletresponse-writer-xss
+        PrintWriter writer = resp.getWriter();
+        writer.write(input1);
     }
-    defer f.Close()
 
-    defer func() {
-        err := f.Close()
-        if err != nil {
-            log.Printf("error closing the file: %s", err)
-        }
-    }()
-
-    // ruleid: use-of-md5
-    h := md5.New()
-    if _, err := io.Copy(h, f); err != nil {
-        log.Fatal(err)
+    protected void ok(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String input1 = req.getParameter("input1");
+        // ok:servletresponse-writer-xss
+        resp.getWriter().write(Encode.forHtml(input1));
     }
-    // ruleid: use-of-md5
-    fmt.Printf("%x", md5.Sum(nil))
 }
-
-func test_rc4() {
-    key := []byte{1, 2, 3, 4, 5, 6, 7}
-    // ruleid: use-of-rc4
-    c, err := rc4.NewCipher(key)
-    dst := make([]byte, len(src))
-    c.XORKeyStream(dst, src)
-}
-
-func test_sha1() {
-    f, err := os.Open("file.txt")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer f.Close()
-    // ruleid: use-of-sha1
-    h := sha1.New()
-    if _, err := io.Copy(h, f); err != nil {
-        log.Fatal(err)
-    }
-    // ruleid: use-of-sha1
-    fmt.Printf("%x", sha1.Sum(nil))
-}
-
-from django.utils.safestring import SafeString, SafeData, SafeText
-
-# ruleid:class-extends-safestring
-class IWantToBypassEscaping(SafeString):
-    def __init__(self):
-        super().__init__()
-
-# ruleid:class-extends-safestring
-class IWantToBypassEscaping2(SafeText):
-    def __init__(self):
-        super().__init__()
-
-# ruleid:class-extends-safestring
-class IWantToBypassEscaping3(SafeData):
-    def __init__(self):
-        super().__init__()
-
-# ok:class-extends-safestring
-class SomethingElse(str):
-    def __init__(self):
-        super().__init__()
